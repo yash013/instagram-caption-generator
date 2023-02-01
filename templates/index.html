@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>File Upload</title>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <form id="upload-form" onsubmit="handleUpload(event)">
+                <div class="form-group">
+                    <label for="file">Choose a file to upload</label>
+                    <input type="file" id="file" name="file" required>
+                </div>
+                <div class="form-group">
+                    <label for="keywords">Enter keywords (separated by commas):</label>
+                    <input type="text" id="keywords" name="keywords" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload</button>
+            </form>
+        </div>
+        <div id="message"></div>
+        <script>
+            function handleUpload(event) {
+                event.preventDefault();
+                let file = document.getElementById('file').files[0];
+                let keywords = document.getElementById('keywords').value;
+                let formData = new FormData();
+                formData.append('file', file);
+                formData.append('keywords', keywords);
+                axios.post('/upload', formData)
+                    .then(response => {
+                        let message = response.data.message;
+                        document.getElementById('message').innerHTML = message;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    });
+            }
+        </script>
+    </body>
+</html>
